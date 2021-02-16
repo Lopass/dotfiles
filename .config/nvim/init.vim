@@ -68,8 +68,15 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'tomasiser/vim-code-dark'
 " Icon
 Plug 'ryanoasis/vim-devicons'
+" Git usage in vim
+Plug 'tpope/vim-fugitive'
 " Conquer of Completion
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+
+" File-line
+Plug 'bogado/file-line'
+" Doxygen
+Plug 'vim-scripts/DoxygenToolkit.vim'
 call plug#end()
 
 " Change the color of the indentLine
@@ -93,6 +100,14 @@ highlight LineNr term=bold cterm=NONE ctermfg=DarkCyan ctermbg=NONE gui=NONE gui
 map <F2> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
+ 
+" Doxygen
+let g:DoxygenToolkit_startCommentTag = "/*!"
+let g:DoxygenToolkit_startCommentBlock = "/* "
+let g:DoxygenToolkit_briefTag_pre = "\\brief "
+let g:DoxygenToolkit_paramTag_pre = "\\param[in, out] "
+let g:DoxygenToolkit_returnTag = "\\return "
+
 "COC plugin settings options
 " if hidden is not set, TextEdit might fail.
 "set hidden
@@ -105,7 +120,7 @@ nmap <F8> :TagbarToggle<CR>
 "set cmdheight=2
 "
 "" You will have bad experience for diagnostic messages when it's default 4000.
-"set updatetime=300
+set updatetime=100
 "
 "" don't give |ins-completion-menu| messages.
 "set shortmess+=c

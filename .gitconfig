@@ -1,0 +1,32 @@
+[include]
+	path = /home/work.gitconfig
+
+
+[merge]
+    commit = no
+    tool = meld
+[mergetool "meld"]
+    # Choose one of these 2 lines (not both!) explained below.
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+[core]
+	editor = nvim
+	pager = diff-so-fancy | less --tabs=4 -RFX
+	attributesFile = /home/loicp/.git.config/attributes
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[diff "dump"]
+	binary = true
+	textconv = /usr/bin/hexdump -v -C
