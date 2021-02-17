@@ -61,6 +61,7 @@ LOCK_BASE_CMD="i3lock \
     -k \
     -f \
     -i $OUTPUT_IMG"
+
 if [ "$lock_args" ]; then
     LOCK_ARGS="$lock_args"  # Passed command
 else

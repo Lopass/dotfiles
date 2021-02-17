@@ -36,8 +36,6 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 #start redshift
 exec /usr/bin/redshift-gtk 
 
-#start redshift
-exec /usr/bin/redshift-gtk 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -151,17 +149,17 @@ bindsym $mod+Shift+ccedilla move container to workspace number $ws9
 bindsym $mod+Shift+agrave move container to workspace number $ws10
 
 #locking the screen ( should be the exact size of the screen )
-bindsym $mod+p exec --no-startup-id xautolock -locknow -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/DL.jpg"
+bindsym $mod+p exec --no-startup-id xautolock -locknow -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/wallpaper/DL_1.png"
 
 # Start the automatic locker with 5 minutes before locking
-exec_always --no-startup-id xautolock -time 5 -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/DL.jpg"
+exec_always --no-startup-id xautolock -time 5 -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/wallpaper/DL_1.png"
 
 # Add background wallpaper
-exec_always --no-startup-id feh --bg-fill "$HOME/.config/i3/DL.jpg"
+exec_always --no-startup-id feh --bg-fill "$HOME/.config/i3/wallpaper/DL_1.png"
 
 #screenshot
-bindsym --release Print exec --no-startup-id scrot -m "$HOME/Images/%Y%m%d_%H%M%S.png"
-bindsym --release Mod1+Sys_Req exec --no-startup-id scrot -u "$HOME/Images/%Y%m%d_%H%M%S.png"
+bindsym --release Print exec --no-startup-id scrot -m "$HOME/Pictures/%Y%m%d_%H%M%S.png"
+bindsym --release Mod1+Sys_Req exec --no-startup-id scrot -u "$HOME/Pictures/%Y%m%d_%H%M%S.png"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {

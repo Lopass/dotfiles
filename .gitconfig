@@ -1,6 +1,5 @@
 [include]
-	path = /home/work.gitconfig
-
+	path = ~/.git.config/work.gitconfig
 
 [merge]
     commit = no
@@ -12,7 +11,7 @@
 [core]
 	editor = nvim
 	pager = diff-so-fancy | less --tabs=4 -RFX
-	attributesFile = /home/loicp/.git.config/attributes
+	attributesFile = ~/.git.config/attributes
 [color]
 	ui = true
 [color "diff-highlight"]
