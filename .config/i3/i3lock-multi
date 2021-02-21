@@ -40,25 +40,29 @@ OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
 OUTPUT_IMG_HEIGHT=0 # Decide size to cover all screens
 
 #i3lock command
-LOCK_BASE_CMD="i3lock \ 
-    --insidevercolor=ffffff00 \ # Sets the interior circle color while the password is being verified.
-    --insidewrongcolor=FFFFFF00 \ # Sets the interior circle color for during flash for an incorrect password.
-    --ringvercolor=ffffffff \ # Sets the ring color while the password is being verified.
-    --ringwrongcolor=ffffffff \ # Sets the ring color during the flash for an incorrect password.
-    --ringcolor=ffffffff \ # Sets the default ring color
+LOCK_BASE_CMD="i3lock \
+    --radius=166 \ # The radius of the circle. Defaults to 90.
+    --linecolor=00000000 \ #Sets the color for the line separating the inside circle, and the outer ring.
+    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
+    --insidewrongcolor=00000000 \ # Sets the interior circle color for during flash for an incorrect password.
+    --ringvercolor=00000000  \ # Sets the ring color while the password is being verified.
+    --ringwrongcolor=00000000 \ # Sets the ring color during the flash for an incorrect password.
+    --ringcolor=00000000  \ # Sets the default ring color
     --insidecolor=00000000 \ # Sets the color for the line separating the inside circle, and the outer ring.
-    --keyhlcolor=ff0000 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
-    --bshlcolor=afafaf \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
+    --keyhlcolor=283d76 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
+    --bshlcolor=283d76  \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
     --separatorcolor=00000000 \ # Sets the color of the 'separtor', which is at both ends of the ring highlights.
     --verifcolor=ffffff00 \ # Sets the color of the status text while verifying. 
     --wrongcolor=ffffff00 \ # Sets the color of the status text when "wrong".
     --layoutcolor=ffffff00 \ # Sets the color of the keyboard layout text. 
     --timecolor=ffffffff \ # Sets the color of the time in the clock.
+    --timepos=956:900 \ # Date position
     --datecolor=ffffffff \ # Sets the color of the date in the clock.
-    --greetertext="♨" \ # Sets the greeter text. Defaults to "".
     --greetercolor=ffffffff \ # Sets the color of the greeter text.
     --greetersize=100 \ # Sets the greettext size of the string
-    -k \
+    --indpos=956:453 \
+    --force-clock \
+    --datestr=\"%A %d %B %Y\" \
     -f \
     -i $OUTPUT_IMG"
 
@@ -67,7 +71,7 @@ if [ "$lock_args" ]; then
 else
     LOCK_ARGS="-t -e"  # Default
 fi
-LOCK_CMD="$LOCK_BASE_CMD $LOCK_ARGS"
+LOCK_CMD="eval $LOCK_BASE_CMD $LOCK_ARGS"
 
 if [ -e "$OUTPUT_IMG" ]
 then

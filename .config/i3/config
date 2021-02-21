@@ -36,6 +36,9 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 #start redshift
 exec /usr/bin/redshift-gtk 
 
+#start conky
+exec  ~/.config/conky/launch_conky.sh
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -63,6 +66,18 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+
+# Move workspace between screens
+bindsym $mod+Ctrl+h move workspace to output left
+bindsym $mod+Ctrl+j move workspace to output down
+bindsym $mod+Ctrl+k move workspace to output up
+bindsym $mod+Ctrl+l move workspace to output right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Ctrl+Up move workspace to output up
+bindsym $mod+Ctrl+Down move workspace to output down
+bindsym $mod+Ctrl+Left move workspace to output left
+bindsym $mod+Ctrl+Right move workspace to output right
 
 # move focused window
 bindsym $mod+Shift+h move left
@@ -102,14 +117,12 @@ bindsym $mod+q focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -148,14 +161,6 @@ bindsym $mod+Shift+underscore move container to workspace number $ws8
 bindsym $mod+Shift+ccedilla move container to workspace number $ws9
 bindsym $mod+Shift+agrave move container to workspace number $ws10
 
-#locking the screen ( should be the exact size of the screen )
-bindsym $mod+p exec --no-startup-id xautolock -locknow -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/wallpaper/DL_1.png"
-
-# Start the automatic locker with 5 minutes before locking
-exec_always --no-startup-id xautolock -time 5 -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/wallpaper/DL_1.png"
-
-# Add background wallpaper
-exec_always --no-startup-id feh --bg-fill "$HOME/.config/i3/wallpaper/DL_1.png"
 
 #screenshot
 bindsym --release Print exec --no-startup-id scrot -m "$HOME/Pictures/%Y%m%d_%H%M%S.png"
@@ -214,3 +219,12 @@ bar {
         status_command i3blocks
 }
 
+#locking the screen ( should be the exact size of the screen )
+bindsym $mod+p exec --no-startup-id xautolock -locknow -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/i3_work_cfg/wallpaper/DL_0.jpg"
+
+
+# Start the automatic locker with 5 minutes before locking
+exec_always --no-startup-id xautolock -time 5 -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/i3_work_cfg/wallpaper/DL_0.jpg"
+
+# Add background wallpaper
+exec_always --no-startup-id feh --bg-fill "$HOME/.config/i3/i3_work_cfg/wallpaper/DL_0.jpg"
