@@ -84,7 +84,10 @@ source $ZSH/oh-my-zsh.sh
 alias vim="nvim"
 
 # Common EXPORT
+# Editor by default
 export EDITOR="nvim"
+# Path to the user configuration
+export CFGR="$HOME/.config/"
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"

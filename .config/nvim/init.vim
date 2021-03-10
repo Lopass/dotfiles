@@ -61,11 +61,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline' "status bar
 Plug 'majutsushi/tagbar' "displays tags
 " Colorschemes
-Plug 'flazz/vim-colorschemes'
-Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'tomasiser/vim-code-dark'
+Plug 'arcticicestudio/nord-vim'
+
 " Icon
 Plug 'ryanoasis/vim-devicons'
 " Git usage in vim
@@ -88,10 +85,8 @@ let g:indentLine_char = '▏'
 let NERDTreeShowHidden=1
 
 " Colorscheme
-set background=dark
-colorscheme codedark 
-"colorscheme gruvbox 
-"
+syntax enable
+colorscheme nord
 
 " Change the color of the line
 highlight LineNr term=bold cterm=NONE ctermfg=DarkCyan ctermbg=NONE gui=NONE guifg=DarkCyan guibg=NONE
