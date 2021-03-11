@@ -212,20 +212,13 @@ gaps outer 3
 
 for_window [class="^.*"] border pixel 2
 
-# Start i3 blocks
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
 bar {
 		font pango:Noto Sabs Mono Condensed Black 12
         status_command i3blocks
 }
 
 #Start polybar
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
-#locking the screen ( should be the exact size of the screen )
-bindsym $mod+p exec --no-startup-id xautolock -locknow -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/i3_work_cfg/wallpaper/DL_1.png"
-
-
-# Start the automatic locker with 5 minutes before locking
-exec_always --no-startup-id xautolock -time 5 -locker "$HOME/.config/i3/i3lock-multi -i $HOME/.config/i3/i3_work_cfg/wallpaper/DL_1.png"
-
-# Add background wallpaper
-exec_always --no-startup-id feh --bg-fill "$HOME/.config/i3/i3_work_cfg/wallpaper/DL_1.png"
