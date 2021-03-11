@@ -39,6 +39,9 @@ exec /usr/bin/redshift-gtk
 #start conky
 exec  ~/.config/conky/launch_conky.sh
 
+#start picom
+exec_always --no-startup-id ~/.config/picom/launch_picom.sh
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
