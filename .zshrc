@@ -87,7 +87,7 @@ alias vim="nvim"
 # Editor by default
 export EDITOR="nvim"
 # Path to the user configuration
-export CFGR="$HOME/.config/"
+export CFGR="$HOME/.config"
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
