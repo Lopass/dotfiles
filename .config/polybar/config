@@ -16,25 +16,46 @@
 ;
 ;==========================================================
 [colors]
+; Nord Colors
+; Polar Night
+nord0 = #2E3440
+nord1 = #3B4252
+nord2 = #434C5E
+nord3 = #4C566A
+; Snow Storm
+nord4 = #D8DEE9
+nord5 = #E5E9F0
+nord6 = #ECEFF4
+; Frost
+nord7 = #8FBCBB
+nord8 = #88C0D0
+nord9 = #81A1C1
+nord10 = #5E81AC
+; Aurora
+nord11 = #BF616A
+nord12 = #D08770
+nord13 = #EBCB8B
+nord14 = #A3BE8C
+
+; Custom key or color
 primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
 
-;Custom from nord
-background = #2E3440
-buffer = #4c566a
-foreground = #D8DEE9
-nord6 = #ECEFF4
-nord7 = #8FBCBB
-nord8 = #88C0D0
-nord9 = #81A1C1
+background = ${colors.nord0} 
+foreground = ${colors.nord4}
+
+buffer = ${colors.nord3}
+urgent = ${colors.nord11}
+warning = ${colors.nord12}
+notify = ${colors.nord13} 
+success = ${colors.nord14}
+
+function = #B48EAD
+
 nordcustom1 = #0BB4D3
 nordcustom2 = #C70039
-urgent = #BF616A
-warning = #D08770
-notify = #EBCB8B
-success = #A3BE8C
-function = #B48EAD
+
 
 [section/base]
 include-file = $HOME/.config/polybar/bars
