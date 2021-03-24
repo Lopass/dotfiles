@@ -83,11 +83,23 @@ source $ZSH/oh-my-zsh.sh
 # Common alias
 alias vim="nvim"
 
-# Common EXPORT
+# Common env vars
 # Editor by default
 export EDITOR="nvim"
-# Path to the user configuration
+
+# Path configuration files and folders
 export CFGR="$HOME/.config"
+
+export CI3="$CFGR/i3"
+export CI3C="$CI3/config"
+export CPI="$CFGR/picom"
+export CPIC="$CPI/config"
+export CPO="$CFGR/polybar"
+export CPOC="$CPO/config"
+export CZSC="$HOME/.zshrc"
+
+# Colors configuration file
+source $HOME/.colorsrc
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -116,4 +128,4 @@ export CFGR="$HOME/.config"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
+alias dt="/usr/bin/git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"
