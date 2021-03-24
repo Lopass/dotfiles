@@ -29,6 +29,13 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
+" share data between nvim instances (registers etc)
+augroup SHADA
+    autocmd!
+    autocmd CursorHold,TextYankPost,FocusGained,FocusLost *
+                \ if exists(':rshada') | rshada | wshada | endif
+augroup END
+
 
 " Show physical tabulations define by tabstop
 set list lcs=tab:\|\ 
