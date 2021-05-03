@@ -56,10 +56,10 @@ function = #B48EAD
 nordcustom1 = #0BB4D3
 nordcustom2 = #C70039
 
-
 [section/base]
-include-file = $HOME/.config/polybar/bars
-include-file = $HOME/.config/polybar/modules
+include-file = $HOME/.config/polybar/bars.ini
+include-file = $HOME/.config/polybar/modules.ini
+include-file = $HOME/.config/polybar/modules_work.ini
 
 [settings]
 screenchange-reload = true
