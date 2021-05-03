@@ -75,7 +75,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions thefuck upd)
+plugins=(git zsh-autosuggestions thefuck upd fzf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,6 +97,10 @@ export CPIC="$CPI/config"
 export CPO="$CFGR/polybar"
 export CPOC="$CPO/config"
 export CZSC="$HOME/.zshrc"
+export CDU="$CFGR/dunst"
+export CDUC="$CDU/dunstrc"
+export CVI="$CFGR/nvim"
+export CVIC="$CVI/init.vim"
 
 # Colors configuration file
 source $HOME/.colorsrc
