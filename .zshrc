@@ -105,6 +105,9 @@ export CVIC="$CVI/init.vim"
 # Colors configuration file
 source $HOME/.colorsrc
 
+# Alias
+alias tg="fuck"
+
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
