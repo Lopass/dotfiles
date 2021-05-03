@@ -39,17 +39,43 @@ OUTPUT_IMG="$CACHE_FOLDER""$MD5_SCREEN_CONFIG"."$MD5_BKG_IMG".png # Path of fina
 OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
 OUTPUT_IMG_HEIGHT=0 # Decide size to cover all screens
 
-#i3lock command
+# i3lock command circle with work wallpaper
+#LOCK_BASE_CMD="i3lock \
+#    --radius=166 \ # The radius of the circle. Defaults to 90.
+#    --linecolor=00000000 \ #Sets the color for the line separating the inside circle, and the outer ring.
+#    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
+#    --insidewrongcolor=00000000 \ # Sets the interior circle color for during flash for an incorrect password.
+#    --ringvercolor=00000000  \ # Sets the ring color while the password is being verified.
+#    --ringwrongcolor=00000000 \ # Sets the ring color during the flash for an incorrect password.
+#    --ringcolor=00000000  \ # Sets the default ring color
+#    --insidecolor=00000000 \ # Sets the color for the line separating the inside circle, and the outer ring.
+#    --keyhlcolor=283d76 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
+#    --bshlcolor=283d76  \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
+#    --separatorcolor=00000000 \ # Sets the color of the 'separtor', which is at both ends of the ring highlights.
+#    --verifcolor=ffffff00 \ # Sets the color of the status text while verifying. 
+#    --wrongcolor=ffffff00 \ # Sets the color of the status text when "wrong".
+#    --layoutcolor=ffffff00 \ # Sets the color of the keyboard layout text. 
+#    --timecolor=ffffffff \ # Sets the color of the time in the clock.
+#    --timepos=956:900 \ # Date position
+#    --datecolor=ffffffff \ # Sets the color of the date in the clock.
+#    --greetercolor=ffffffff \ # Sets the color of the greeter text.
+#    --greetersize=100 \ # Sets the greettext size of the string
+#    --indpos=956:453 \
+#    --force-clock \
+#    --datestr=\"%A %d %B %Y\" \
+#    -f \
+#    -i $OUTPUT_IMG"
+
 LOCK_BASE_CMD="i3lock \
-    --radius=166 \ # The radius of the circle. Defaults to 90.
+    --radius=40 \ # The radius of the circle. Defaults to 90.
     --linecolor=00000000 \ #Sets the color for the line separating the inside circle, and the outer ring.
-    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
-    --insidewrongcolor=00000000 \ # Sets the interior circle color for during flash for an incorrect password.
-    --ringvercolor=00000000  \ # Sets the ring color while the password is being verified.
-    --ringwrongcolor=00000000 \ # Sets the ring color during the flash for an incorrect password.
     --ringcolor=00000000  \ # Sets the default ring color
+    --insidewrongcolor=00000000  \ # Sets the interior circle color for during flash for an incorrect password.
+    --ringwrongcolor=C70039 \ # Sets the ring color during the flash for an incorrect password.
+    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
+    --ringvercolor=81A1C1 \ # Sets the ring color while the password is being verified.
     --insidecolor=00000000 \ # Sets the color for the line separating the inside circle, and the outer ring.
-    --keyhlcolor=283d76 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
+    --keyhlcolor=D8DEE9 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
     --bshlcolor=283d76  \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
     --separatorcolor=00000000 \ # Sets the color of the 'separtor', which is at both ends of the ring highlights.
     --verifcolor=ffffff00 \ # Sets the color of the status text while verifying. 
@@ -60,7 +86,7 @@ LOCK_BASE_CMD="i3lock \
     --datecolor=ffffffff \ # Sets the color of the date in the clock.
     --greetercolor=ffffffff \ # Sets the color of the greeter text.
     --greetersize=100 \ # Sets the greettext size of the string
-    --indpos=956:453 \
+    --indpos=956:810 \ # Set the circle position
     --force-clock \
     --datestr=\"%A %d %B %Y\" \
     -f \
