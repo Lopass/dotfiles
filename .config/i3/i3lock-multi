@@ -1,8 +1,273 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 #Constants
 DISPLAY_RE="([0-9]+)x([0-9]+)\\+([0-9]+)\\+([0-9]+)" # Regex to find display dimensions
-CACHE_FOLDER="$HOME"/.cache/i3lock-multimonitor/img/ # Cache folder
+CACHE_FOLDER="$HOME/.cache/i3lock-multimonitor/img/" # Cache folder
+INSIDECOLOR=00000000
+RINGCOLOR=ffffffff
+KEYHLCOLOR=8FBCBB
+BSHLCOLOR=8FBCBB
+SEPARATORCOLOR=00000000
+INSIDEVERCOLOR=00000000
+INSIDEWRONGCOLOR=A3BE8C
+RINGVERCOLOR=ffffffff
+RINGWRONGCOLOR=ffffffff
+VERIFCOLOR=ffffffff
+TIMECOLOR=fbf1c7ff
+DATECOLOR=fbf1c7ff
+LOGINBOX="#ffffffff"
+FONT="Hack"
+#LOCKTEXT=''
+DATEFORMAT="%A %d/%m/%Y"
+WALLPAPER_CMD='feh --bg-fill --no-fehbg'
+
+I3LOCK_COLOR_ARGS=(
+    "-n"
+    "--time-pos=x+110:y+1020"
+    "--date-pos=x+110:y+1040"
+    "--clock"
+    "--date-str=\"${DATEFORMAT}\""
+    #"--date-align=1"
+    #"--date-str=\"${LOCKTEXT}\""
+    "--inside-color=${INSIDECOLOR}"
+    "--ring-color=${RINGCOLOR}"
+    "--line-uses-inside"
+    "--keyhl-color=${KEYHLCOLOR}"
+    "--bshl-color=${BSHLCOLOR}"
+    "--separator-color=${SEPARATORCOLOR}"
+    "--insidever-color=${INSIDEVERCOLOR}"
+    "--insidewrong-color=${INSIDEWRONGCOLOR}"
+    "--ringver-color=${RINGVERCOLOR}"
+    "--ringwrong-color=${RINGWRONGCOLOR}"
+    "--ind-pos=x+300:y+1010"
+    "--radius=25"
+    "--ring-width=4"
+    "--verif-text="
+    "--wrong-text="
+    "--noinput-text="
+    "--verif-color=${VERIFCOLOR}"
+    "--time-color=${TIMECOLOR}"
+    "--date-color=${DATECOLOR}"
+    "--time-font=${FONT}"
+    "--date-font=${FONT}"
+    "--layout-font=${FONT}"
+    "--verif-font=${FONT}"
+    "--wrong-font=${FONT}"
+    "--force-clock"
+    "--pass-media-keys"
+    "--time-str=%H:%M:%S"
+)
+
+# $1: number of pixels to convert
+# $2: 1 for width. 2 for height
+logical_px() {
+	# get dpi value from xrdb
+	local dpi
+	dpi=$(grep -oP 'Xft.dpi:\s*\K\d+' "$HOME/.Xresources" | bc)
+	if [ -z "$dpi" ]; then
+		dpi=$(xdpyinfo | sed -En "s/\s*resolution:\s*([0-9]*)x([0-9]*)\s.*/\\$2/p" | head -n1)
+	fi
+
+	# return the default value if no DPI is set
+	if [ -z "$dpi" ]; then
+		echo "$1"
+	else
+		local scale
+		scale=$(echo "scale=2; $dpi / 96.0" | bc)
+
+		# check if scaling the value is worthy
+		if [ "$(echo "$scale > 1.25" | bc -l)" -eq 0 ]; then
+			echo "$1"
+		else
+			echo "$scale * $1 / 1" | bc
+		fi
+	fi
+}
+
+# $1: the background
+update() {
+
+	# use
+	background="$1"
+
+	# default blur level; fallback to 1
+	[[ $blur_level ]] || blur_level=1
+
+    #add_loginbox "$background" "$LOGINBOX" 25 350 30 80
+
+	# User supplied Image
+	user_image="$folder/user_image.png"
+
+	# create folder
+	if [ ! -d "$folder" ]; then
+		echo "Creating '$folder' directory to cache processed images."
+		mkdir -p "$folder"
+	fi
+
+	# get random file in dir if passed argument is a dir
+	rec_get_random "$background"
+
+	# get user image
+	cp "$user_input" "$user_image"
+	if [ ! -f "$user_image" ]; then
+		echo 'Please specify the path to the image you would like to use'
+		exit 1
+	fi
+
+	# replace orignal with user image
+	cp "$user_image" "$orig_wall"
+	rm "$user_image"
+
+	echo 'Generating alternate images based on the image you specified,'
+	echo 'please wait this might take few seconds...'
+
+	# wallpapers
+
+	echo
+	echo 'Converting provided image to match your resolution...'
+	# resize image
+	convert "$orig_wall" -resize "$res""^" -gravity center -extent "$res" "$resized"
+
+	echo
+	echo 'Applying dim, blur, and pixelation effect to resized image'
+	# dim
+	convert "$resized" -fill black -colorize 40% "$dim"
+
+	# pixel
+	convert -scale 10% -scale 1000% "$resized" "$pixel"
+
+	# blur
+	blur_shrink=$(echo "scale=2; 20 / $blur_level" | bc)
+	blur_sigma=$(echo "scale=2; 0.6 * $blur_level" | bc)
+	convert "$resized" \
+		-filter Gaussian \
+		-resize "$blur_shrink%" \
+		-define "filter:sigma=$blur_sigma" \
+		-resize "$res^" -gravity center -extent "$res" \
+		"$blur"
+
+	# dimblur
+	convert "$dim" \
+		-filter Gaussian \
+		-resize "$blur_shrink%" \
+		-define "filter:sigma=$blur_sigma" \
+		-resize "$res^" -gravity center -extent "$res" \
+		"$dimblur"
+
+	# lockscreen backgrounds
+
+	echo
+	echo 'Caching images for faster screen locking'
+	## resized
+	#convert "$resized" -draw "fill #$loginbox $rectangles" "$l_resized"
+
+	## dim
+	#convert "$dim" -draw "fill #$loginbox $rectangles" "$l_dim"
+
+	## blur
+	#convert "$blur" -draw "fill #$loginbox $rectangles" "$l_blur"
+
+	## dimblur
+	#convert "$dimblur" -draw "fill #$loginbox $rectangles" "$l_dimblur"
+
+	## pixel
+	#convert "$pixel" -draw "fill #$loginbox $rectangles" "$l_pixel"
+	echo
+	echo 'All required changes have been applied'
+}
+
+# Add the loginbox on an image
+# $1: the image
+# $2: the color (HTML format)
+# $3: loginbox X position
+# $4: loginbox width
+# $5: loginbox Y position
+# $6: loginbox height
+#add_loginbox() {
+#    local img="$1"
+#    local color="$2"
+#    local loginbox_x="$3"
+#    local loginbox_width="$4"
+#    local loginbox_y="$5"
+#    local loginbox_height="$6"
+#    local rectangles=" "
+#    local sr=$(xrandr --query | grep ' connected' | grep -o '[0-9][0-9]*x[0-9][0-9]*[^ ]*')
+#
+#    for res in $sr; do
+#        local sra
+#        local cx
+#        local cy
+#        sra=(${res//[x+]/ })
+#        cx=$((sra[2] + $(logical_px $loginbox_x  1)))
+#        cy=$((sra[1] - $(logical_px $loginbox_y 2)))
+#        rectangles+="rectangle $cx,$cy $((cx+$(logical_px $loginbox_width 1))),$((cy-$(logical_px $loginbox_height 2))) "
+#    done
+#
+#    # Fill the image with the loginbox
+#    convert "$img" -draw "fill ${color} ${rectangles}" "${img}"
+#}
+
+lock() {
+    local background="$1"
+    local lock_args="$2"
+    eval i3lock "${I3LOCK_COLOR_ARGS[*]}" -i "$background" "$lock_args"
+}
+
+# $1: background image
+generate_output_image() {
+    local line
+    local screen_width
+    local screen_height
+    local screen_x
+    local screen_y
+    local background
+    local md5_bkg_img
+    local output_img
+    local cached_img
+
+    # Decide size to cover all screens
+    local output_img_width=0
+    local output_img_height=0
+    local params=""
+
+    background="$1"
+    md5_bkg_img="$2"
+    output_img="$3"
+
+    # Execute xrandr to get information about the monitors:
+    while read line
+    do
+      # If we are reading the line that contains the position information:
+      if [[ $line =~ $DISPLAY_RE ]]; then
+        # Extract information and append some parameters to the ones that will be given to ImageMagick:
+        screen_width=${BASH_REMATCH[1]}
+        screen_height=${BASH_REMATCH[2]}
+        screen_x=${BASH_REMATCH[3]}
+        screen_y=${BASH_REMATCH[4]}
+
+        cached_img="${CACHE_FOLDER}/${screen_width}x${screen_height}.${md5_bkg_img}.png"
+        ## if cache for that screensize doesnt exist
+        if ! [ -e "${cached_img}" ]
+        then
+            # Create image for that screensize
+            eval convert "${background}" '-resize' '${screen_width}X${screen_height}^' '-gravity' 'Center' '-crop' '${screen_width}X${screen_height}+0+0' '+repage' '$cached_img'
+
+            #add_loginbox "$cached_img" "$LOGINBOX" 25 350 30 80
+        fi
+
+        # Decide size of output image
+        if (( output_img_width < screen_width+screen_x )); then output_img_width=$((screen_width+screen_x)); fi;
+        if (( output_img_height < screen_height+screen_y )); then output_img_height=$(( screen_height+screen_y )); fi;
+
+        params="$params -type TrueColor $cached_img -geometry +$screen_x+$screen_y -composite "
+      fi
+    done <<<"$(xrandr)"
+
+    #Execute ImageMagick:
+    eval convert -size "${output_img_width}x${output_img_height}" 'xc:black' "$output_img"
+    eval convert "$output_img" "$params" "$output_img"
+}
+
 if ! [ -e "$CACHE_FOLDER" ]; then
     mkdir -p "$CACHE_FOLDER"
 fi
@@ -10,12 +275,16 @@ fi
 #Passed arguments
 while getopts ":i:a:" opt; do
     case $opt in
-        i) arg_image="$OPTARG"
-        ;;
-        a) lock_args="$OPTARG"
-        ;;
-        \?) echo "Invalid option -$OPTARG" >&2 && exit 1
-        ;;
+        i)
+            arg_image="$OPTARG"
+            ;;
+        a)
+            lock_args="$OPTARG"
+            ;;
+        \?)
+            echo "Invalid option -$OPTARG" >&2
+            exit 1
+            ;;
     esac
 done
 
@@ -35,108 +304,25 @@ fi
 
 MD5_BKG_IMG=$(md5sum "$BKG_IMG" | cut -c 1-10)
 MD5_SCREEN_CONFIG=$(xrandr | md5sum - | cut -c 1-32) # Hash of xrandr output
-OUTPUT_IMG="$CACHE_FOLDER""$MD5_SCREEN_CONFIG"."$MD5_BKG_IMG".png # Path of final image
+OUTPUT_IMG="${CACHE_FOLDER}${MD5_SCREEN_CONFIG}.${MD5_BKG_IMG}.png" # Path of final image
 OUTPUT_IMG_WIDTH=0 # Decide size to cover all screens
 OUTPUT_IMG_HEIGHT=0 # Decide size to cover all screens
-
-# i3lock command circle with work wallpaper
-#LOCK_BASE_CMD="i3lock \
-#    --radius=166 \ # The radius of the circle. Defaults to 90.
-#    --linecolor=00000000 \ #Sets the color for the line separating the inside circle, and the outer ring.
-#    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
-#    --insidewrongcolor=00000000 \ # Sets the interior circle color for during flash for an incorrect password.
-#    --ringvercolor=00000000  \ # Sets the ring color while the password is being verified.
-#    --ringwrongcolor=00000000 \ # Sets the ring color during the flash for an incorrect password.
-#    --ringcolor=00000000  \ # Sets the default ring color
-#    --insidecolor=00000000 \ # Sets the color for the line separating the inside circle, and the outer ring.
-#    --keyhlcolor=283d76 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
-#    --bshlcolor=283d76  \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
-#    --separatorcolor=00000000 \ # Sets the color of the 'separtor', which is at both ends of the ring highlights.
-#    --verifcolor=ffffff00 \ # Sets the color of the status text while verifying. 
-#    --wrongcolor=ffffff00 \ # Sets the color of the status text when "wrong".
-#    --layoutcolor=ffffff00 \ # Sets the color of the keyboard layout text. 
-#    --timecolor=ffffffff \ # Sets the color of the time in the clock.
-#    --timepos=956:900 \ # Date position
-#    --datecolor=ffffffff \ # Sets the color of the date in the clock.
-#    --greetercolor=ffffffff \ # Sets the color of the greeter text.
-#    --greetersize=100 \ # Sets the greettext size of the string
-#    --indpos=956:453 \
-#    --force-clock \
-#    --datestr=\"%A %d %B %Y\" \
-#    -f \
-#    -i $OUTPUT_IMG"
-
-LOCK_BASE_CMD="i3lock \
-    --radius=40 \ # The radius of the circle. Defaults to 90.
-    --linecolor=00000000 \ #Sets the color for the line separating the inside circle, and the outer ring.
-    --ringcolor=00000000  \ # Sets the default ring color
-    --insidewrongcolor=00000000  \ # Sets the interior circle color for during flash for an incorrect password.
-    --ringwrongcolor=C70039 \ # Sets the ring color during the flash for an incorrect password.
-    --insidevercolor=00000000  \ # Sets the interior circle color while the password is being verified.
-    --ringvercolor=81A1C1 \ # Sets the ring color while the password is being verified.
-    --insidecolor=00000000 \ # Sets the color for the line separating the inside circle, and the outer ring.
-    --keyhlcolor=D8DEE9 \ # Sets the color of the ring 'highlight' strokes that appear upon keypress.
-    --bshlcolor=283d76  \ # Sets the color of the ring 'highlight' strokes that appear upon backspace.
-    --separatorcolor=00000000 \ # Sets the color of the 'separtor', which is at both ends of the ring highlights.
-    --verifcolor=ffffff00 \ # Sets the color of the status text while verifying. 
-    --wrongcolor=ffffff00 \ # Sets the color of the status text when "wrong".
-    --layoutcolor=ffffff00 \ # Sets the color of the keyboard layout text. 
-    --timecolor=ffffffff \ # Sets the color of the time in the clock.
-    --timepos=956:900 \ # Date position
-    --datecolor=ffffffff \ # Sets the color of the date in the clock.
-    --greetercolor=ffffffff \ # Sets the color of the greeter text.
-    --greetersize=100 \ # Sets the greettext size of the string
-    --indpos=956:810 \ # Set the circle position
-    --force-clock \
-    --datestr=\"%A %d %B %Y\" \
-    -f \
-    -i $OUTPUT_IMG"
 
 if [ "$lock_args" ]; then
     LOCK_ARGS="$lock_args"  # Passed command
 else
     LOCK_ARGS="-t -e"  # Default
 fi
-LOCK_CMD="eval $LOCK_BASE_CMD $LOCK_ARGS"
 
 if [ -e "$OUTPUT_IMG" ]
 then
     # Lock screen since image already exists
-    $LOCK_CMD
+    lock "$OUTPUT_IMG" "-t -e"
     exit 0
 fi
 
-#Execute xrandr to get information about the monitors:
-while read LINE
-do
-  #If we are reading the line that contains the position information:
-  if [[ $LINE =~ $DISPLAY_RE ]]; then
-    #Extract information and append some parameters to the ones that will be given to ImageMagick:
-    SCREEN_WIDTH=${BASH_REMATCH[1]}
-    SCREEN_HEIGHT=${BASH_REMATCH[2]}
-    SCREEN_X=${BASH_REMATCH[3]}
-    SCREEN_Y=${BASH_REMATCH[4]}
-
-    CACHE_IMG="$CACHE_FOLDER""$SCREEN_WIDTH"x"$SCREEN_HEIGHT"."$MD5_BKG_IMG".png
-    ## if cache for that screensize doesnt exist
-    if ! [ -e "$CACHE_IMG" ]
-    then
-        # Create image for that screensize
-        eval convert '$BKG_IMG' '-resize' '${SCREEN_WIDTH}X${SCREEN_HEIGHT}^' '-gravity' 'Center' '-crop' '${SCREEN_WIDTH}X${SCREEN_HEIGHT}+0+0' '+repage' '$CACHE_IMG'
-    fi
-
-    # Decide size of output image
-    if (( $OUTPUT_IMG_WIDTH < $SCREEN_WIDTH+$SCREEN_X )); then OUTPUT_IMG_WIDTH=$(($SCREEN_WIDTH+$SCREEN_X)); fi;
-    if (( $OUTPUT_IMG_HEIGHT < $SCREEN_HEIGHT+$SCREEN_Y )); then OUTPUT_IMG_HEIGHT=$(( $SCREEN_HEIGHT+$SCREEN_Y )); fi;
-
-    PARAMS="$PARAMS -type TrueColor $CACHE_IMG -geometry +$SCREEN_X+$SCREEN_Y -composite "
-  fi
-done <<<"`xrandr`"
-
-#Execute ImageMagick:
-eval convert -size ${OUTPUT_IMG_WIDTH}x${OUTPUT_IMG_HEIGHT} 'xc:black' $OUTPUT_IMG
-eval convert $OUTPUT_IMG $PARAMS $OUTPUT_IMG
+generate_output_image "$BKG_IMG" "$MD5_BKG_IMG" "$OUTPUT_IMG"
 
 #Lock the screen:
-$LOCK_CMD
+lock "$OUTPUT_IMG" "$LOCK_ARGS"
 # vim: set ts=4 sw=4 tw=0 et :
