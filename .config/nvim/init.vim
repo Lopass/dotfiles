@@ -8,6 +8,9 @@ set encoding=UTF-8
 " < Vim errors mgt >
 set visualbell       " Sound off, flash instead
 
+" < Clipboard >
+set clipboard+=unnamedplus " use to enable clipboard for all yanking
+
 " < Search >
 set showmatch        " Highlight search words
 set hlsearch         " Highlight all match in a search
@@ -17,6 +20,7 @@ set hlsearch         " Highlight all match in a search
 set linebreak        " Cut to the last word and not the last char in a line
 set nowrap           " Wrap long lines
 set number           " Print line number
+
 " << Indentation >>
 set smartindent      " Smart indentation on !
 set autoindent       " Indent at the same level of the previous line
@@ -89,6 +93,7 @@ Plug 'ryanoasis/vim-devicons'      " Add icons for pluggins and more
 
 " << Git usage in vim >>
 Plug 'tpope/vim-fugitive'          " Add Git commands directly inside vim
+Plug 'vim-scripts/vim-gitgutter'
 
 " << Misc >>
 Plug 'bogado/file-line'            " Little plugin that allow this : vim file:linenumber
@@ -112,6 +117,7 @@ colorscheme nord
 
 " Change the color of the line
 highlight LineNr term=bold cterm=NONE ctermfg=DarkCyan ctermbg=NONE gui=NONE guifg=DarkCyan guibg=NONE
+" Change the color of comments 
 augroup nord-overrides
   autocmd!
   autocmd ColorScheme nord highlight Comment ctermfg=6
