@@ -71,13 +71,17 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-" << Dev >>
+"<< Commenting >>
 Plug 'vim-scripts/DoxygenToolkit.vim'
 
 " << Formating >>
 Plug 'yggdroot/indentline'         " A vim plugin to display the indention levels with thin vertical lines
 
-" << Files explorer >>
+" << LSP >>
+Plug 'neovim/nvim-lspconfig'         " lspconfig plugin
+Plug 'p00f/clangd_extensions.nvim'   " clang extension for lsp
+
+" << Files explorer && scrolling >>
 Plug 'scrooloose/nerdtree'         " Open a toolbar with folder and files architecture
 Plug 'Xuyuanp/nerdtree-git-plugin' " Show git information in Nerdtree
 
@@ -93,15 +97,19 @@ Plug 'ryanoasis/vim-devicons'      " Add icons for pluggins and more
 
 " << Git usage in vim >>
 Plug 'tpope/vim-fugitive'          " Add Git commands directly inside vim
-Plug 'vim-scripts/vim-gitgutter'
+Plug 'vim-scripts/vim-gitgutter'   " Diff with git
 
 " << Misc >>
 Plug 'bogado/file-line'            " Little plugin that allow this : vim file:linenumber
 
+" << Snippet >>
+" Track the engine.
+Plug 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
 call plug#end()
 
-" Snippets (test)
-"Plug 'garbas/vim-snipmate'
 
 " < NERDTree >
 let g:netrw_winsize = 20 " Change the window size for netrw
@@ -110,6 +118,11 @@ let NERDTreeShowHidden=1 " Show hidden files in NerdTree by default
 map <F2> :NERDTreeToggle<CR>
 
 " < COLORS >
+" Change the color of comments 
+augroup nord-theme-overrides
+  autocmd ColorScheme nord highlight Comment ctermfg=116
+augroup END
+
 let g:indentLine_color_gui = '#A6A6A6' " Change the color of the indentLine
 let g:indentLine_char = '▏'    " Change the character of the indentLine
 syntax enable
@@ -117,11 +130,17 @@ colorscheme nord
 
 " Change the color of the line
 highlight LineNr term=bold cterm=NONE ctermfg=DarkCyan ctermbg=NONE gui=NONE guifg=DarkCyan guibg=NONE
-" Change the color of comments 
-augroup nord-overrides
-  autocmd!
-  autocmd ColorScheme nord highlight Comment ctermfg=6
-augroup END
+
+" < UltiSnip >
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 " < Tagbar >
 "nmap <F8> :TagbarToggle<CR>
@@ -133,3 +152,5 @@ let g:DoxygenToolkit_briefTag_pre = "\\brief "
 let g:DoxygenToolkit_paramTag_pre = "\\param[in, out] "
 let g:DoxygenToolkit_returnTag = "\\return "
 
+" < Rust >
+let g:rustfmt_autosave = 1
