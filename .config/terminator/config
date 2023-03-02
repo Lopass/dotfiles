@@ -11,20 +11,28 @@
   title_use_system_font = False
   title_font = Hack Nerd Font Mono Bold 9
 [keybindings]
+  broadcast_off = None
+  broadcast_group = None
+  broadcast_all = None
 [profiles]
   [[default]]
+    allow_bold = False
     icon_bell = False
-    background_color = "#2E3440"
+    background_color = "#2e3440"
     cursor_shape = underline
     cursor_color = "#D8DEE9"
-    font = SauceCodePro Nerd Font Mono Medium 13
-    foreground_color = "#D8DEE9"
+    font = SauceCodePro Nerd Font Mono Semi-Bold 13
+    foreground_color = "#d8dee9"
     show_titlebar = False
     scrollbar_position = hidden
     scrollback_lines = 0
     scrollback_infinite = True
     palette = "#3B4252:#BF616A:#A3BE8C:#EBCB8B:#81A1C1:#B48EAD:#88C0D0:#E5E9F0:#4C566A:#BF616A:#A3BE8C:#EBCB8B:#81A1C1:#B48EAD:#8F  BCBB:#ECEFF4"
+    use_custom_command = True
+    custom_command = zsh --login
     use_system_font = False
+    copy_on_selection = True
+    autoclean_groups = False
 [layouts]
   [[default]]
     [[[window0]]]
